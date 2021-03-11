@@ -25,7 +25,7 @@ app.use(function(req, res, next) {
 
 app.use(cors())
 app.use(express.json()) 
-const uri = "mongodb+srv://admin_mathieu:CAPSLOCK2@cluster0.2urrs.mongodb.net/items"
+const uri = "mongodb+srv://admin_mathieu:******@cluster0.2urrs.mongodb.net/items"
 mongoose.connect(uri, {useCreateIndex: true,});
 const connection = mongoose.connection;
 connection.once("open", () => [
