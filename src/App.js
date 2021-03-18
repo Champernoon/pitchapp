@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Create from "./components/Create"
 import Header from "./components/Header"
@@ -14,45 +14,55 @@ function App() {
 
 
 const [pitchs, setPitchs] = useState([])
-const initialFormState = { key:"",
-id:null,
+const [block, setBlock] = useState (true)
+const initialFormState = {
+id: "",
 title: "",
 content: "",
 user: "",
+img: "",
 file: "",
 }
 const [currentPitch, setCurrentPitch] = useState(initialFormState)
 
 const editRow = (id) => {
   console.log(id)
-  setCurrentPitch({ id: pitchs[id]._id, title: pitchs[id].title, content: pitchs[id].content, user: pitchs[id].user, file: pitchs[id].file })
+  setCurrentPitch({ id: pitchs[id]._id, img: pitchs[id].img, title: pitchs[id].title, content: pitchs[id].content, user: pitchs[id].user, file: pitchs[id].file })
   console.log(currentPitch)
 }
 
 const updatePitch = async (id, updatedPitch) => {
   await axios.post("http://localhost:5000/pitchs/update/" + id, updatedPitch)
+  setBlock(false)
   setPitchs(pitchs.map((pitch) => (pitch.id === id ? updatedPitch : pitch)))
   console.log(id)
-  console.log(updatedPitch)
   
 }
 // }
 
 
-axios.get('http://localhost:5000/pitchs', {timeout: 20000})
-.then(res => {
-  setPitchs(res.data)
-  console.log(res.data)
-})
-.catch(error => console.log(error))
+const displayList = async() => {
+  await axios.get('http://localhost:5000/pitchs')
+  .then(res => {
+    setPitchs(res.data)
+    setBlock(true)
+    console.log("lol")
+  })
+  .catch(error => console.log(error))
+}
+
+
+useEffect(() => {
+displayList()}, [block])
+
 
 
 function addPitch(newPitch) { 
+  setBlock(false)
     setPitchs(prevPitchs => {
       return [...prevPitchs, newPitch];
     },
-    );
-  
+    )
 }
 
 
@@ -61,7 +71,7 @@ const deletePost = async (id) => {
   // try {
     await axios.delete("http://localhost:5000/pitchs/" + pitchs[id]._id)
     .then (res =>  console.log(res.data))
-    
+    setBlock(false)
     setPitchs(prevNotes => {
         return prevNotes.filter((noteItem, index) => {
           return index !== pitchs.id;
