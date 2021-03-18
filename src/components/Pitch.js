@@ -22,7 +22,9 @@ function Pitch(props) {
     <div className="note">
       <h1>{props.title}</h1>
       <p>{props.content}</p>
-      <img src="images/e6cb137c-ef02-48af-9130-a3342099e2eb-1615468972886.jpg" alt="marchepo" width="50px" height="50px"/>
+{/* /* Here I tried to display at least one individual image from the image folder but it keeps trying to access it from localhost3000 */}
+<img src={props.file} alt="marchepo" width="50px" height="50px"/>
+
       <button onClick={handleClick} >
         <DeleteIcon />
       </button>

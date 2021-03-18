@@ -3,7 +3,9 @@ import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Zoom from "@material-ui/core/Zoom";
 import axios from "axios"
-
+import {Link} from "react-router-dom"
+import {BrowserRouter as Router, Route} from "react-router-dom"
+import { withRouter } from 'react-router-dom'
 
 function Create(props) {
 
@@ -23,6 +25,10 @@ function Create(props) {
     formData.append('title', note.title);
     formData.append('user', note.user);
     formData.append('img', note.img);
+
+    console.log(note.file)
+
+    props.history.push('/')
   
 
    props.onAdd(note)
@@ -30,7 +36,7 @@ function Create(props) {
 
   axios.post("http://localhost:5000/pitchs/add", formData)
       .then(res => {console.log(res.data)})
-      .catch(error => {console.log(error.response)})   
+      .catch(error => {console.log(error.response)})
 
     // setNote({
     //   title: "",
@@ -43,6 +49,7 @@ function Create(props) {
     event.preventDefault();
     
     console.log(note);
+
 
   }
 
@@ -58,7 +65,7 @@ function Create(props) {
 })}
 
 function handlePhoto(e) {
-  console.log(e.target.file)
+  console.log(e.target.files[0])
   setNote({...note, file: e.target.files[0]});
 }
 
@@ -103,10 +110,8 @@ function handlePhoto(e) {
           onChange={handlePhoto}
           accept=".png, .jpg, .jpeg"
           />
-
-          <Fab type="submit" >
-            <AddIcon />
-          </Fab>
+          
+<Fab type="submit"> <AddIcon /></Fab>
       </form>
     </div>
   );
@@ -114,7 +119,7 @@ function handlePhoto(e) {
 
 
 
-export default Create
+export default withRouter(Create)
 
 
 
