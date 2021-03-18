@@ -35,12 +35,31 @@ Pitch.find()
 })
 
 
+// router.route("/add").post((req,res) => {
+    
+//         var obj =  {title :req.body.title,
+//          content : req.body.content,
+//          user : req.body.user,
+//          img : req.body.img,
+//          file : req.body.file}
+ 
+
+//     pitch.save()
+//     .then(()=> res.json("pitch updated!"))
+//     .catch(err => res.status(400).json("Error:" + err));
+// })
+// .catch(err => res.status(400).json("Error:" + err));
+
+// })
+
+
+
 router.route("/add").post(upload.single('file'), (req, res, next) => {
 var obj =  {title :req.body.title,
  content : req.body.content,
  user : req.body.user,
  img : req.body.img,
- file : {data: fs.readFileSync(path.join("./images/" + req.file.filename)), encoding: "UTF-8"},}
+ file : "http://localhost:5000/images/" + req.file.filename}
 
 const newPitch = new Pitch (obj);
 
@@ -61,6 +80,24 @@ router.route("/:id").delete((req, res) => {
     .then(() => res.json("DELETED"))
     .catch(err => res.status(400).json("Error:" + err));
 })
+     
+// router.route("/update/:id").post(upload.single('file'), (req, res, next) => {
+//     Pitch.findByIdAndUpdate(req.params.id)
+//     .then (pitch => {
+//                 pitch.title = req.body.title
+//                 pitch.content = req.body.content
+//                 pitch.user = req.body.user
+//                 pitch.img = req.body.img
+//                 // pitch.file = "http://localhost:5000/images/" + req.file.filename
+//                 console.log(pitch)
+                
+//         pitch.save()
+//             .then(() => res.json("Bien ouej"))
+//             .catch(err => res. status(400).json("Error : " + err));
+        
+//         })
+//     })
+
 
 router.route("/update/:id").post((req,res) => {
     Pitch.findByIdAndUpdate(req.params.id)
@@ -70,6 +107,8 @@ router.route("/update/:id").post((req,res) => {
         pitch.user = req.body.user
         pitch.img = req.body.img
         pitch.file = req.body.file
+        console.log(pitch.file)
+ 
 
     pitch.save()
     .then(()=> res.json("pitch updated!"))
